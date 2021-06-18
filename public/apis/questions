@@ -1,0 +1,52 @@
+[
+    {
+        "id": 0,
+        "question": "What is the capital of Nigeria?",
+        "options": {
+            "a":"New Delhi",
+            "b":"Abuja",
+            "c":"Aba",
+            "d":"Onisha"
+        }
+    },
+    {
+        "id": 1,
+        "question": "What is the capital of India?",
+        "options": {
+            "a":"Punjab",
+            "b":"Awka",
+            "c":"Owerri",
+            "d":"Enugu"
+        }
+    },
+    {
+        "id": 2,
+        "question": "What is the capital of Australia?",
+        "options": {
+            "a":"Mumbai",
+            "b":"Abuja",
+            "c":"Warri",
+            "d":"Sydney"
+        }
+    },
+    {
+        "id": 3,
+        "question": "What is the capital of Turkey?",
+        "options": {
+            "a":"Bangalore",
+            "b":"Ankara",
+            "c":"Istanbul",
+            "d":"Enugu"
+        }
+    },
+    {
+        "id": 4,
+        "question": "What is the capital of Syria?",
+        "options": {
+            "a":"Bangalore",
+            "b":"Ankara",
+            "c":"Istanbul",
+            "d":"Enugu"
+        }
+    }
+]

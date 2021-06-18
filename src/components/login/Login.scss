@@ -1,0 +1,25 @@
+@import "../../assets/sass/colors";
+@import "../../assets/sass/functions";
+
+.login {
+  max-width: 400px;
+  margin: 60px auto;
+  border-radius: 5px;
+  padding: 20px;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+
+  &__logo {
+    text-align: center;
+  }
+
+  &__error {
+    display: block;
+    color: #ff0000;
+    margin-bottom: 10px;
+    font-size: em(13px);
+  }
+
+  &__button {
+    margin: 5px 0;
+  }
+}
