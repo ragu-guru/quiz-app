@@ -1,31 +1,27 @@
 // import logo from './logo.svg';
 import './App.scss';
-import React, { useState } from 'react';
+import React from 'react';
 import {
   BrowserRouter as Router, 
   Switch,
-  Link,
   Route,
-  Redirect,
-  withRouter
+  Redirect
 } from 'react-router-dom'
 import Login from './components/login/Login';
 import Quiz from './components/quiz/Quiz';
-import {fakeAuth, session} from './assets/js/helpers'
+import { session, validateNRIC } from './assets/js/helpers'
 
-
+// Compnent to direct the routes.
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route {...rest} render={(props) => (
-    fakeAuth.isAuthenticated === true
-      ? <Component {...props} />
+    !!session.getSession('efg').IC && validateNRIC(session.getSession('efg').IC)
+      ? <Component {...props} /> 
       : <Redirect to={{
           pathname: '/login',
           state: { from: props.location }
         }} />
   )} />
 )
-
-export const UserContext = React.createContext();
 
 function App(props) {
   return (

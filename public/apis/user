@@ -1,4 +1,7 @@
 {
     "IC": "G5439445X",
-    "name": "Ragu Gurumoorthy"
+    "name": "Ragu Gurumoorthy",
+    "course": "csoc",
+    "duration": "60",
+    "startTime": "2021/06/21 23:50"
 }

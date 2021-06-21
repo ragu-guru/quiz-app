@@ -21,6 +21,8 @@ body {
   font-family: "Montserrat", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-size: 1em;
+  line-height: 1.6;
 }
 
 code {
@@ -32,7 +34,7 @@ label {
   font-weight: 500;
 }
 
-input {
+input[type="text"] {
   border: 1px solid #9e9e9e;
   padding: 10px;
   width: 100%;
@@ -46,6 +48,12 @@ button {
   background-color: #04924a;
   border: none;
   border-radius: 30px;
+  margin: 15px 0;
   text-transform: uppercase;
   color: #fff;
+  border: 1px solid #04924a;
+}
+
+button[disabled] {
+  opacity: 0.3;
 }

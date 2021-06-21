@@ -1,26 +1,28 @@
 [
     {
-        "id": 0,
+        "id": 1,
         "question": "What is the capital of Nigeria?",
         "options": {
             "a":"New Delhi",
             "b":"Abuja",
             "c":"Aba",
             "d":"Onisha"
-        }
+        },
+        "image": "https://via.placeholder.com/450x300.jpg"
     },
     {
-        "id": 1,
+        "id": 2,
         "question": "What is the capital of India?",
         "options": {
             "a":"Punjab",
             "b":"Awka",
             "c":"Owerri",
             "d":"Enugu"
-        }
+        },
+        "image": "https://via.placeholder.com/450x300.jpg"
     },
     {
-        "id": 2,
+        "id": 3,
         "question": "What is the capital of Australia?",
         "options": {
             "a":"Mumbai",
@@ -30,23 +32,25 @@
         }
     },
     {
-        "id": 3,
+        "id": 4,
         "question": "What is the capital of Turkey?",
         "options": {
             "a":"Bangalore",
             "b":"Ankara",
             "c":"Istanbul",
             "d":"Enugu"
-        }
+        },
+        "image": "https://via.placeholder.com/450x300.jpg"
     },
     {
-        "id": 4,
+        "id": 5,
         "question": "What is the capital of Syria?",
         "options": {
             "a":"Bangalore",
             "b":"Ankara",
             "c":"Istanbul",
             "d":"Enugu"
-        }
+        },
+        "image": "https://via.placeholder.com/450x300.jpg"
     }
 ]

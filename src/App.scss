@@ -1,4 +1,7 @@
 .App {
+  max-width: 1024px;
+  margin: 0 auto;
+  padding: 15px;
 }
 
 .error {
@@ -6,4 +9,43 @@
   color: #ff0000;
   margin-bottom: 10px;
   font-size: em(13px);
+}
+
+.efg-btn-arrow {
+  width: 26px;
+  height: 1px;
+  display: inline-block;
+  background: #00a546;
+  position: relative;
+  vertical-align: middle;
+  margin: 0 0 0 15px;
+  transition: all 0.2s ease-in-out;
+
+  &:before,
+  &:after {
+    content: "";
+    width: 1px;
+    height: 13px;
+    display: block;
+    position: absolute;
+    background: inherit;
+    right: 0;
+  }
+
+  &::before {
+    transform-origin: bottom;
+    transform: rotate(-45deg);
+    bottom: 0.5px;
+  }
+
+  &:after {
+    transform-origin: top;
+    transform: rotate(45deg);
+    top: 0.5px;
+  }
+
+  &.reverse {
+    transform: rotate(180deg);
+    margin: 0 15px 0 0;
+  }
 }

@@ -1,16 +1,5 @@
 // Helper functions.
-const fakeAuth = {
-    isAuthenticated: false,
-    authenticate(cb) {
-        this.isAuthenticated = true
-        setTimeout(cb, 100) // fake async
-    },
-    signout(cb) {
-        this.isAuthenticated = false
-        setTimeout(cb, 100) // fake async
-    }
-}
-
+import dayjs from 'dayjs';
 //Based on http://www.samliew.com/icval/
 /* eslint-disable */
 const validateNRIC = function(str) {
@@ -52,19 +41,37 @@ const validateNRIC = function(str) {
 }
 /* eslint-enable */
 
-
 // Set Session
 const session = {
     setSession(key, value) {
-        sessionStorage.setItem(key, value);
+        sessionStorage.setItem(key, JSON.stringify(value));
     },
     getSession(key) {
-        return sessionStorage.getItem(key);
+        return sessionStorage.getItem(key) ? JSON.parse(sessionStorage.getItem(key)) : false;
     },
     removeSession(key) {
         sessionStorage.removeItem(key);
     }
 }
 
+// Helper to find time difference.
+const calculateTimeLeft = (val) => {
+    let endDate = dayjs(val);
+    let currentDate = dayjs();
+    let difference = endDate.diff(currentDate);
+    let timeLeft = {};
 
-export {fakeAuth, validateNRIC, session};
+    if (difference > 0) {
+        timeLeft = {
+            days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+            hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+            minutes: Math.floor((difference / 1000 / 60) % 60),
+            seconds: Math.floor((difference / 1000) % 60),
+            totalTimeLeftInSec : difference
+        };
+    }
+
+    return timeLeft;
+}
+
+export { validateNRIC, session, calculateTimeLeft };
