@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {calculateTimeLeft} from '../../assets/js/helpers';
+import './Countdown.scss';
 
 export default function Countdown(props) {
     const [timeLeft, setTimeLeft] = useState(calculateTimeLeft(props.endTime));

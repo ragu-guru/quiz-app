@@ -7,6 +7,7 @@ import { session, validateNRIC, calculateTimeLeft } from '../../assets/js/helper
 import userIcon from '../../assets/images/user-icon.svg';
 import { Redirect } from 'react-router-dom';
 import Countdown from '../countdown/Countdown';
+import logo from '../../assets/images/efg.jpeg';
 
 class Quiz extends React.Component {
     constructor(props) {
@@ -206,14 +207,22 @@ class Quiz extends React.Component {
         return (
             <div className="quiz">
                 <div className="quiz__userSection">
-                    Hi 
-                    <span className="quiz__username">
-                        {userName}
-                        <img width="20" src={userIcon} alt="user" />
-                        <span className="quiz__logout" onClick={this.logOut}>Log Out</span>
-                    </span>
+                    <div className="quiz__logo">
+                        <img src={logo} alt="Efg Logo" />
+                    </div>
+                    <div>
+                        <div className="quiz__userDetails">
+                            Hi 
+                            <span className="quiz__username">
+                                {userName}
+                                <img width="20" src={userIcon} alt="user" />
+                                <span className="quiz__logout" onClick={this.logOut}>Log Out</span>
+                            </span>
+                        </div>
+                        { showQuiz && <Countdown text="Time left: " endTime={examEndTime} />}
+
+                    </div>
                 </div>
-                {showQuiz && <Countdown endTime={examEndTime} />}
                 <div className="quiz__wrapper">
 
                     {/* Show instruction based on the state value. */}
