@@ -14,6 +14,7 @@ class Quiz extends React.Component {
         super(props);
         this.state = {
             userName: session.getSession('efg').name,
+            userID: session.getSession('efg').nric,
             showInstruction: true, // This is to show instruction page before quiz.
             questionIndex: 0, // The component will load the question based on this value. Initial value is set to 0 to match the array index.
             isLoading: true, // This is to findout whether the data fetching is still on progress. Based on this value, we will show loading gif or message.
@@ -21,7 +22,7 @@ class Quiz extends React.Component {
             questions: [], // Container array where the questions data from api call will be stored.
             noOfQuestionsAnswered: 0,
             examDuration: session.getSession('efg').duration,
-            examStartTime: session.getSession('efg').startTime,
+            examStartTime: session.getSession('efg').date,
             countdownToStartExam: false,
             endExam: false,
             showQuiz: false,
@@ -126,18 +127,20 @@ class Quiz extends React.Component {
 
     handleSubmit = (event) => {
         event.preventDefault();
-        let answers = this.state.questions.map(question => question.answer);
+        let answers = this.state.questions.map(question => ({questionId: question.id, answer: question.answer}));
 
-        const IC = session.getSession('efg').IC;
-        if (!IC || !validateNRIC(IC)) {
+        const id = this.state.userID;
+        if (!id || !validateNRIC(id)) {
             console.log('Something went wrong');
             return;
         }
         let data = {
-            IC,
+            id,
             answers
         }
-        axios.post("/apis/questions", data).then(res => {
+
+        console.log(data);
+        axios.post("http://localhost:8000/efg/api/result.php", data).then(res => {
             console.log(res);
         });
     }
@@ -155,7 +158,12 @@ class Quiz extends React.Component {
                 examEndTime 
             })
         }
-        axios.get("/apis/questions").then(response => {
+        axios.get("http://localhost:8000/efg/api/questions.php", {
+            params: {
+                id: this.state.userID
+            }
+        }).then(response => {
+            console.log(response.data);
             this.setState({ questions: response.data }); // Update the questions property in the state object.
             this.setState({ isLoading: false }); // Update isLoading property in state  object.
         });
@@ -193,7 +201,7 @@ class Quiz extends React.Component {
         }
 
         if (otherErrors) {
-            return <div>Something wrong! Looks like your exam is already over. Please contact your trainer.</div>
+            return <div className="App">Something wrong! Looks like your exam is already over. Please contact your trainer.</div>
         }
 
         // Show quiz.
@@ -201,6 +209,7 @@ class Quiz extends React.Component {
             return <div className="App">Loading...</div>;
         }
         
+        // Destructure question, id, question options and question image.
         let { id, question, options, image } = questions[questionIndex];
         
         

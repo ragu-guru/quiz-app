@@ -22,10 +22,10 @@ class Login extends React.Component {
             this.inputRef.current.focus();
             return;
         }
-        axios.get(`/apis/user`)
+        axios.get(`http://localhost:8000/efg/api/user.php`, {params: { id: this.state.value }})
         .then(res => {
             const persons = res.data;
-            if (persons.IC === this.state.value) {
+            if (persons.nric === this.state.value) {
                 session.setSession('efg', persons);
                 this.setState({redirectToReferrer: true});
             } else {
@@ -42,7 +42,7 @@ class Login extends React.Component {
     }
 
     componentDidMount() {
-        if (!!session.getSession('efg').IC && validateNRIC(session.getSession('efg').IC)) {
+        if (!!session.getSession('efg').nric && validateNRIC(session.getSession('efg').nric)) {
             this.setState({redirectToReferrer: true});
         }
     }

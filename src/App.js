@@ -14,7 +14,7 @@ import { session, validateNRIC } from './assets/js/helpers'
 // Compnent to direct the routes.
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route {...rest} render={(props) => (
-    !!session.getSession('efg').IC && validateNRIC(session.getSession('efg').IC)
+    !!session.getSession('efg').nric && validateNRIC(session.getSession('efg').nric)
       ? <Component {...props} /> 
       : <Redirect to={{
           pathname: '/login',
