@@ -9,6 +9,7 @@ import {
 } from 'react-router-dom'
 import Login from './components/login/Login';
 import Quiz from './components/quiz/Quiz';
+import Results from './components/results/Results';
 import { session, validateNRIC } from './assets/js/helpers'
 
 // Compnent to direct the routes.
@@ -17,7 +18,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
     !!session.getSession('efg').nric && validateNRIC(session.getSession('efg').nric)
       ? <Component {...props} /> 
       : <Redirect to={{
-          pathname: '/login',
+          pathname: '/',
           state: { from: props.location }
         }} />
   )} />
@@ -29,8 +30,11 @@ function App(props) {
       <Router>
         <Switch>
           <PrivateRoute path='/quiz' component={Quiz} />
-          <Route path="/">
+          <Route exact path="/">
             <Login />
+          </Route>
+          <Route path="/results">
+            <Results />
           </Route>
         </Switch>
       </Router>

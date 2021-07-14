@@ -2,6 +2,7 @@ import React from 'react';
 import './Login.scss';
 import logo from '../../assets/images/efg.jpeg';
 import axios from 'axios';
+import dayjs from 'dayjs';
 import { validateNRIC, session } from '../../assets/js/helpers'
 import { Redirect } from 'react-router-dom'
 
@@ -22,14 +23,19 @@ class Login extends React.Component {
             this.inputRef.current.focus();
             return;
         }
-        axios.get(`http://localhost:8000/efg/api/user.php`, {params: { id: this.state.value }})
+        axios.get(`https://exam.efg.com.sg/backend/api/user.php`, {params: { id: this.state.value }})
         .then(res => {
             const persons = res.data;
             if (persons.nric === this.state.value) {
+                let examEndTime = dayjs(persons.date).add(persons.duration, 'm');
+                if (examEndTime.diff(dayjs()) <= 0 || persons.result) {
+                    this.setState({error: `Seems like your exam is already over! Please contact your trainer!!`});
+                    return;
+                }
                 session.setSession('efg', persons);
                 this.setState({redirectToReferrer: true});
             } else {
-                this.setState({error: `Oops! Something wrong!! Please contact the trainer!`});
+                this.setState({error: `Oops! Something wrong!! Please contact your trainer!`});
             }
         });
     }
@@ -45,6 +51,9 @@ class Login extends React.Component {
         if (!!session.getSession('efg').nric && validateNRIC(session.getSession('efg').nric)) {
             this.setState({redirectToReferrer: true});
         }
+
+        
+        // if( examEndTime.diff(dayjs()) < 300000 ) {
     }
     
     render() {

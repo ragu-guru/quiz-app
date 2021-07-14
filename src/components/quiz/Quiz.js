@@ -15,6 +15,7 @@ class Quiz extends React.Component {
         this.state = {
             userName: session.getSession('efg').name,
             userID: session.getSession('efg').nric,
+            courseName: session.getSession('efg').course,
             showInstruction: true, // This is to show instruction page before quiz.
             questionIndex: 0, // The component will load the question based on this value. Initial value is set to 0 to match the array index.
             isLoading: true, // This is to findout whether the data fetching is still on progress. Based on this value, we will show loading gif or message.
@@ -27,7 +28,9 @@ class Quiz extends React.Component {
             endExam: false,
             showQuiz: false,
             examEndTime: 3600000, // 1 hour in milliseconds.
-            otherErrors: false
+            otherErrors: false,
+            marksPercentage: 0,
+            result: session.getSession('efg').result
         };
         console.log(session.getSession('efg'))
     }
@@ -127,7 +130,7 @@ class Quiz extends React.Component {
 
     handleSubmit = (event) => {
         event.preventDefault();
-        let answers = this.state.questions.map(question => ({questionId: question.id, answer: question.answer}));
+        let answers = this.state.questions.map(question => ({quesId: question.id, ans: question.answer}));
 
         const id = this.state.userID;
         if (!id || !validateNRIC(id)) {
@@ -140,15 +143,23 @@ class Quiz extends React.Component {
         }
 
         console.log(data);
-        axios.post("http://localhost:8000/efg/api/result.php", data).then(res => {
-            console.log(res);
+        axios.get("https://exam.efg.com.sg/backend/api/result.php", {
+            params: data
+        }).then(res => {
+            let resData = res.data;
+            console.log(resData);
+            this.setState({
+                result: res.data["result"],
+                marksPercentage: res.data["marks"],
+                showQuiz: false
+            })
         });
     }
 
     // Fetch api data. We are using axios to get the data.
     componentDidMount() {
         let examEndTime = dayjs(this.state.examStartTime).add(this.state.examDuration, 'm');
-        if( examEndTime.diff(dayjs()) < 300000 ) {
+        if( examEndTime.diff(dayjs()) < 0 ) {
             this.setState({
                 otherErrors: true
             })
@@ -158,12 +169,11 @@ class Quiz extends React.Component {
                 examEndTime 
             })
         }
-        axios.get("http://localhost:8000/efg/api/questions.php", {
+        axios.get("https://exam.efg.com.sg/backend/api/questions.php", {
             params: {
                 id: this.state.userID
             }
         }).then(response => {
-            console.log(response.data);
             this.setState({ questions: response.data }); // Update the questions property in the state object.
             this.setState({ isLoading: false }); // Update isLoading property in state  object.
         });
@@ -195,7 +205,7 @@ class Quiz extends React.Component {
     }
 
     render() {
-        const { userName, countdownToStartExam, showQuiz, examDuration, examStartTime, showInstruction, isLoading, questionIndex, questions, noOfQuestionsAnswered, validationFailed, endExam, examEndTime, otherErrors } = this.state;
+        const { userName, courseName, countdownToStartExam, showQuiz, examStartTime, examDuration, showInstruction, isLoading, questionIndex, questions, noOfQuestionsAnswered, validationFailed, endExam, examEndTime, otherErrors, marksPercentage, result } = this.state;
         if (!userName) {
             return <Redirect to={'/'} />
         }
@@ -238,17 +248,21 @@ class Quiz extends React.Component {
                     {showInstruction
                         ? 
                         <div className="quiz__instructions">
-                            <h1>Instructions about this exam</h1>
-                            <p>Quiz instructions goes here</p>
+                            <h1>Course Name: {courseName}</h1>
+                            <p><strong>Start Time</strong>: {examStartTime}</p>
+                            <p><strong>Duration</strong>: {examDuration} minutes</p>
+
+                            <h3>Instructions for the exam:</h3>
+                            <p>Please read the below instructions carefully before proceeding with the exam. For any queries, please contact your trainer immediately.</p>
                             <ul>
                                 <li>
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                                    The exam has a strict cut off time and it will automatically end when times out.
                                 </li>
                                 <li>
-                                    Donec sed massa sit amet neque vulputate egestas.
+                                    Please answer every question to proceed to next question. You can use the 'previous' and 'next' buttons to navigate throught the questions. 
                                 </li>
                                 <li>
-                                    Fusce congue felis tristique nulla ullamcorper congue.
+                                    Do not refresh the page while the exam is in progress. This will remove all your selected and answers and you might have to redo everything.
                                 </li>
                             </ul>
                             {countdownToStartExam 
@@ -259,38 +273,52 @@ class Quiz extends React.Component {
                         </div>
                         : 
                         <div className="quiz__questions">
-                            {/* // Show progress bar */}
-                            <ProgressBar noOfQuestionsAnswered={noOfQuestionsAnswered} questionLength={questions.length} />
+                            {result
+                                ? 
+                                    <>
+                                        <h2>Your have scored {marksPercentage}%</h2>
+                                        {result === 'Pass' ? <h3>Congratulations! You are PASS!</h3> : <h3>Sorry. You are unable to clear this exam. Better luck next time!</h3> }
+                                        <p>Your trainer will reach out to you on the next steps. Please stay calm!</p>
+                                        <div>
+                                            <button onClick={this.logOut}>Exit</button>
+                                        </div>
+                                    </>
+                                : 
+                                <>
+                                    {/* // Show progress bar */}
+                                    <ProgressBar noOfQuestionsAnswered={noOfQuestionsAnswered} questionLength={questions.length} />
 
-                            {/* // Show Questions */}
-                            <form id="quiz__form" onSubmit={this.handleSubmit} ref={this.radioRef}>
-                                <div className="quiz__imgContainer">
-                                    {image && <img src="https://via.placeholder.com/450x300.jpg" alt="Diagram" />}
-                                </div>
-                                <h2>
-                                    {id} . {question}
-                                </h2>
-                                {Object.keys(options).map((key) => (
-                                    <label key={key} className="quiz__input">
-                                        <input type="radio" name={id} value={key} onChange={this.handleChange} />
-                                        <span>{options[key]}</span>
-                                    </label>
-                                ))}
+                                    {/* // Show Questions */}
+                                    <form id="quiz__form" onSubmit={this.handleSubmit} ref={this.radioRef}>
+                                        <div className="quiz__imgContainer">
+                                            {image && <img src="https://via.placeholder.com/450x300.jpg" alt="Diagram" />}
+                                        </div>
+                                        <h2>
+                                            {id} . {question}
+                                        </h2>
+                                        {Object.keys(options).map((key) => (
+                                            <label key={key} className="quiz__input">
+                                                <input type="radio" name={id} value={key} onChange={this.handleChange} />
+                                                <span>{options[key]}</span>
+                                            </label>
+                                        ))}
 
-                                {/* Error message. */}
-                                {validationFailed && (
-                                    <span className="error">Please select one option</span>
-                                )}
+                                        {/* Error message. */}
+                                        {validationFailed && (
+                                            <span className="error">Please select one option</span>
+                                        )}
 
-                                {/* Prev button */}
-                                <button className="quiz__arrow-btn" disabled={questionIndex === 0 && true} onClick={(e) => this.handleQuestion(e, 'prev')}><span className="efg-btn-arrow reverse"></span>Prev</button>
-                                
-                                {/* Next button */}
-                                <button className="quiz__arrow-btn" disabled={(questionIndex + 1 === questions.length && noOfQuestionsAnswered === questions.length) && true} onClick={(e) => this.handleQuestion(e, 'next')}>Next<span className="efg-btn-arrow"></span></button>
+                                        {/* Prev button */}
+                                        <button className="quiz__arrow-btn" disabled={questionIndex === 0 && true} onClick={(e) => this.handleQuestion(e, 'prev')}><span className="efg-btn-arrow reverse"></span>Prev</button>
+                                        
+                                        {/* Next button */}
+                                        <button className="quiz__arrow-btn" disabled={(questionIndex + 1 === questions.length && noOfQuestionsAnswered === questions.length) && true} onClick={(e) => this.handleQuestion(e, 'next')}>Next<span className="efg-btn-arrow"></span></button>
 
-                                {/* Submit button */}
-                                <button type="submit" className="quiz__submit" disabled={(noOfQuestionsAnswered !== questions.length || endExam) && true} >Finished!</button>
-                            </form>
+                                        {/* Submit button */}
+                                        <button type="submit" className="quiz__submit" disabled={(noOfQuestionsAnswered !== questions.length || endExam) && true} >Finished!</button>
+                                    </form>
+                                </>
+                            }
                         </div>
                     }
                 </div>
