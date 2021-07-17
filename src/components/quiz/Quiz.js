@@ -143,7 +143,7 @@ class Quiz extends React.Component {
         }
 
         console.log(data);
-        axios.get("https://exam.efg.com.sg/backend/api/result.php", {
+        axios.get(process.env.REACT_APP_EXAM_RESULT_API, {
             params: data
         }).then(res => {
             let resData = res.data;
@@ -169,7 +169,7 @@ class Quiz extends React.Component {
                 examEndTime 
             })
         }
-        axios.get("https://exam.efg.com.sg/backend/api/questions.php", {
+        axios.get(process.env.REACT_APP_QUESTIONS_API, {
             params: {
                 id: this.state.userID
             }

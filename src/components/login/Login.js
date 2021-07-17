@@ -23,7 +23,8 @@ class Login extends React.Component {
             this.inputRef.current.focus();
             return;
         }
-        axios.get(`https://exam.efg.com.sg/backend/api/user.php`, {params: { id: this.state.value }})
+        console.log(process.env);
+        axios.get(process.env.REACT_APP_USER_AUTH_API, {params: { id: this.state.value }})
         .then(res => {
             const persons = res.data;
             if (persons.nric === this.state.value) {
