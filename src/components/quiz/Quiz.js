@@ -14,7 +14,8 @@ class Quiz extends React.Component {
         super(props);
         this.state = {
             userName: session.getSession('efg').name,
-            userID: session.getSession('efg').nric,
+            nric: session.getSession('efg').nric,
+            userID: session.getSession('efg').user_id,
             courseName: session.getSession('efg').course,
             showInstruction: true, // This is to show instruction page before quiz.
             questionIndex: 0, // The component will load the question based on this value. Initial value is set to 0 to match the array index.
@@ -132,7 +133,7 @@ class Quiz extends React.Component {
         event.preventDefault();
         let answers = this.state.questions.map(question => ({quesId: question.id, ans: question.answer}));
 
-        const id = this.state.userID;
+        const id = this.state.nric;
         if (!id || !validateNRIC(id)) {
             console.log('Something went wrong');
             return;
@@ -143,7 +144,7 @@ class Quiz extends React.Component {
         }
 
         console.log(data);
-        axios.get(process.env.REACT_APP_EXAM_RESULT_API, {
+        axios.get(process.env.REACT_APP_USER_RESULT_API, {
             params: data
         }).then(res => {
             let resData = res.data;
@@ -255,6 +256,14 @@ class Quiz extends React.Component {
                             <h3>Instructions for the exam:</h3>
                             <p>Please read the below instructions carefully before proceeding with the exam. For any queries, please contact your trainer immediately.</p>
                             <ul>
+                                <li>This is a closed book individual test</li>
+                                <li>There are a total of 40 MCQ with passing marks 60%.</li>
+                                <li>A total of 1 hour is given to complete the exam. The page
+                                will automatically log off after 1 hour.</li>
+                                <li>No photo taking or recording is allowed.</li>
+                                <li>No assistance by others during the examination.</li>
+                                <li>Candidate will automatically fail if not complying with the
+                                above instructions.</li>
                                 <li>
                                     The exam has a strict cut off time and it will automatically end when times out.
                                 </li>
@@ -264,6 +273,7 @@ class Quiz extends React.Component {
                                 <li>
                                     Do not refresh the page while the exam is in progress. This will remove all your selected and answers and you might have to redo everything.
                                 </li>
+                                
                             </ul>
                             {countdownToStartExam 
                                 ? <Countdown endTime={examStartTime} text="Please wait. Your exam will start in" />

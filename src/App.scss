@@ -1,7 +1,15 @@
+@import "assets/sass/colors";
+@import "assets/sass/functions";
+
 .App {
   max-width: 1024px;
   margin: 0 auto;
   padding: 15px;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
 }
 
 .error {

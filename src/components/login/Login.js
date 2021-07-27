@@ -28,6 +28,10 @@ class Login extends React.Component {
         .then(res => {
             const persons = res.data;
             if (persons.nric === this.state.value) {
+                if (persons.session === "1") {
+                    this.setState({error: `Seems like you're logged in somewhere! Please logout from there or contact your trainer!!`});
+                    return;
+                }
                 let examEndTime = dayjs(persons.date).add(persons.duration, 'm');
                 if (examEndTime.diff(dayjs()) <= 0 || persons.result) {
                     this.setState({error: `Seems like your exam is already over! Please contact your trainer!!`});
@@ -74,7 +78,7 @@ class Login extends React.Component {
                         <label>
                             Enter your NRIC / FIN:
                             <input type="text" className="login__input" value={this.state.value} onChange={this.handleChange} placeholder="GXXXXXXXX" ref={this.inputRef} />
-                            <span className="login__error">{this.state.error}</span>
+                            <span className="login__error error">{this.state.error}</span>
                         </label>
                         <button type="submit"  className="login__button">Proceed</button>
                     </form>
