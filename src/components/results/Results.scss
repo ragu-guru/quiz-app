@@ -2,9 +2,6 @@
 @import "../../assets/sass/functions";
 @import "react-datepicker/dist/react-datepicker.css";
 
-// Importing the login css since we have a login box style for form.
-@import "../login/Login.scss";
-
 .results {
   .react-datepicker-wrapper {
     display: block;

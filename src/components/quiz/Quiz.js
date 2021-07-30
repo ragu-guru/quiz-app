@@ -17,6 +17,7 @@ class Quiz extends React.Component {
             nric: session.getSession('efg').nric,
             userID: session.getSession('efg').user_id,
             courseName: session.getSession('efg').course,
+            classId: session.getSession('efg').class,
             showInstruction: true, // This is to show instruction page before quiz.
             questionIndex: 0, // The component will load the question based on this value. Initial value is set to 0 to match the array index.
             isLoading: true, // This is to findout whether the data fetching is still on progress. Based on this value, we will show loading gif or message.
@@ -59,8 +60,15 @@ class Quiz extends React.Component {
     }
 
     logOut = () => {
-        session.removeSession('efg');
+        session.removeSession('efg'); 
         this.setState({userName: false});
+
+        axios.post(process.env.REACT_APP_USER_AUTH_API, {
+            params: {
+                id: this.state.nric,
+                session: 0
+            }
+        });
     }
 
     // onChange handler for radio buttons. Basically used to remove the validation error message.
@@ -140,7 +148,8 @@ class Quiz extends React.Component {
         }
         let data = {
             id,
-            answers
+            answers,
+            classId: this.state.classId
         }
 
         console.log(data);
@@ -172,7 +181,8 @@ class Quiz extends React.Component {
         }
         axios.get(process.env.REACT_APP_QUESTIONS_API, {
             params: {
-                id: this.state.userID
+                id: this.state.userID,
+                classId: this.state.classId
             }
         }).then(response => {
             this.setState({ questions: response.data }); // Update the questions property in the state object.
@@ -304,7 +314,7 @@ class Quiz extends React.Component {
                                             {image && <img src="https://via.placeholder.com/450x300.jpg" alt="Diagram" />}
                                         </div>
                                         <h2>
-                                            {id} . {question}
+                                            {questionIndex + 1} . {question}
                                         </h2>
                                         {Object.keys(options).map((key) => (
                                             <label key={key} className="quiz__input">

@@ -8,17 +8,19 @@ import {
   Redirect
 } from 'react-router-dom'
 import Login from './components/login/Login';
+import Admin from './components/admin/Admin';
 import Quiz from './components/quiz/Quiz';
 import Results from './components/results/Results';
+import Dashboard from './components/dashboard/Dashboard';
 import { session, validateNRIC } from './assets/js/helpers'
 
 // Compnent to direct the routes.
-const PrivateRoute = ({ component: Component, ...rest }) => (
+const PrivateRoute = ({ component: Component, sessionKey: key, redirectTo: pathname, ...rest }) => (
   <Route {...rest} render={(props) => (
-    !!session.getSession('efg').nric && validateNRIC(session.getSession('efg').nric)
+    !!session.getSession(key).nric && validateNRIC(session.getSession(key).nric)
       ? <Component {...props} /> 
       : <Redirect to={{
-          pathname: '/',
+          pathname,
           state: { from: props.location }
         }} />
   )} />
@@ -29,13 +31,17 @@ function App(props) {
     <div className="App">
       <Router>
         <Switch>
-          <PrivateRoute path='/quiz' component={Quiz} />
+          <PrivateRoute path='/quiz' sessionKey='efg' redirectTo='/' component={Quiz} />
           <Route exact path="/">
             <Login />
           </Route>
           <Route path="/results">
             <Results />
           </Route>
+          <Route exact path="/admin">
+            <Admin />
+          </Route>
+          <PrivateRoute path='/admin/dashboard' sessionKey='efg-admin' redirectTo='/admin' component={Dashboard} />
         </Switch>
       </Router>
     </div>

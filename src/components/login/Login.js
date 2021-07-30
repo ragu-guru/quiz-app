@@ -23,7 +23,6 @@ class Login extends React.Component {
             this.inputRef.current.focus();
             return;
         }
-        console.log(process.env);
         axios.get(process.env.REACT_APP_USER_AUTH_API, {params: { id: this.state.value }})
         .then(res => {
             const persons = res.data;
