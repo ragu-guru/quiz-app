@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { useTable, useSortBy } from 'react-table';
+import dayjs from 'dayjs';
 import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 import './Results.scss';
 // Importing the login css since we have a login box style for form.
@@ -115,7 +116,7 @@ function Results() {
                                     Exam date:
                                     <select onChange={handleScheduleChange}>
                                         {schedule.map(schedule => (
-                                            <option key={schedule.class_id} value={schedule.class_id}>{schedule.date}</option>
+                                            <option key={schedule.class_id} value={schedule.class_id}>{dayjs.unix(schedule.date).format('DD/MM/YYYY HH:mm:ss')}</option>
                                         ))}
                                     </select>
                                 </label>

@@ -31,8 +31,10 @@ class Login extends React.Component {
                     this.setState({error: `Seems like you're logged in somewhere! Please logout from there or contact your trainer!!`});
                     return;
                 }
-                let examEndTime = dayjs(persons.date).add(persons.duration, 'm');
-                if (examEndTime.diff(dayjs()) <= 0 || persons.result) {
+                let examEndTime = persons.date + persons.duration * 60;
+                let examEndTimeDayJS = dayjs.unix(examEndTime);
+                console.log(examEndTimeDayJS.format('DD/MM/YYYY HH:mm:ss'));
+                if (examEndTimeDayJS.diff(dayjs()) <= 0 || persons.result) {
                     this.setState({error: `Seems like your exam is already over! Please contact your trainer!!`});
                     return;
                 }

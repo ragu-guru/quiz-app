@@ -25,7 +25,7 @@ class Quiz extends React.Component {
             questions: [], // Container array where the questions data from api call will be stored.
             noOfQuestionsAnswered: 0,
             examDuration: session.getSession('efg').duration,
-            examStartTime: session.getSession('efg').date,
+            examStartTime: dayjs.unix(session.getSession('efg').date).format(),
             countdownToStartExam: false,
             endExam: false,
             showQuiz: false,
@@ -40,7 +40,9 @@ class Quiz extends React.Component {
 
     // Proceed handler.
     handleProceed = () => {
+        console.log(this.state.examStartTime);
         let timeLeftToStartExam = calculateTimeLeft(this.state.examStartTime);
+        console.log(timeLeftToStartExam);
         if(timeLeftToStartExam) {
             this.setState({
                 countdownToStartExam: true
@@ -63,7 +65,7 @@ class Quiz extends React.Component {
         session.removeSession('efg'); 
         this.setState({userName: false});
 
-        axios.post(process.env.REACT_APP_USER_AUTH_API, {
+        axios.get(process.env.REACT_APP_USER_AUTH_API, {
             params: {
                 id: this.state.nric,
                 session: 0
@@ -260,7 +262,7 @@ class Quiz extends React.Component {
                         ? 
                         <div className="quiz__instructions">
                             <h1>Course Name: {courseName}</h1>
-                            <p><strong>Start Time</strong>: {examStartTime}</p>
+                            <p><strong>Start Time</strong>: {dayjs(examStartTime).format('DD/MM/YYYY HH:mm:ss')}</p>
                             <p><strong>Duration</strong>: {examDuration} minutes</p>
 
                             <h3>Instructions for the exam:</h3>
