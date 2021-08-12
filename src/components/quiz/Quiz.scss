@@ -3,6 +3,9 @@
 
 .quiz {
   position: relative;
+  max-width: 1024px;
+  margin: 0 auto;
+  padding: 20px;
 
   &__wrapper {
     min-height: 40vh;

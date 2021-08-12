@@ -1,0 +1,19 @@
+.react-calendar {
+  button {
+    color: #000;
+  }
+}
+
+.react-datetime-picker {
+  display: flex;
+
+  &__wrapper {
+    border-radius: 4px;
+    padding: 4px 8px;
+    border: 1px solid #9e9e9e;
+  }
+
+  button {
+    margin: 0;
+  }
+}

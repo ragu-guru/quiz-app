@@ -38,10 +38,10 @@ function App(props) {
           <Route path="/results">
             <Results />
           </Route>
-          <Route exact path="/admin">
+          <PrivateRoute path='/admin/dashboard' sessionKey='efg-admin' redirectTo='/admin' component={Dashboard} />
+          <Route path="/admin">
             <Admin />
           </Route>
-          <PrivateRoute path='/admin/dashboard' sessionKey='efg-admin' redirectTo='/admin' component={Dashboard} />
         </Switch>
       </Router>
     </div>

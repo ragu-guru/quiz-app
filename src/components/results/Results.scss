@@ -1,9 +1,8 @@
 @import "../../assets/sass/colors";
 @import "../../assets/sass/functions";
-@import "react-datepicker/dist/react-datepicker.css";
 
 .results {
-  .react-datepicker-wrapper {
-    display: block;
-  }
+  max-width: 1024px;
+  margin: 0 auto;
+  padding: 20px;
 }

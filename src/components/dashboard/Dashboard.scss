@@ -1,0 +1,29 @@
+.dashboard {
+  display: flex;
+  min-height: 100vh;
+
+  &__left {
+    background: #333;
+    color: #fff;
+    padding: 50px 20px;
+
+    a {
+      color: #fff;
+      text-decoration: none;
+    }
+  }
+
+  &__nav {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    .active {
+      color: green;
+    }
+  }
+
+  &__right {
+    padding: 20px 50px;
+  }
+}
